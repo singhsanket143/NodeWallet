@@ -12,7 +12,7 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "./prismaNamespace.ts"
+import type * as Prisma from "./prismaNamespace"
 
 
 const config: runtime.GetPrismaClientConfig = {
@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.4.2",
   "engineVersion": "94a226be1cf2967af2541cca5529f0f7ba866919",
   "activeProvider": "mysql",
-  "inlineSchema": "//Schema for Paytm Wallet Clone\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../../src/generated/prisma\" //default > node_modules/@prisma/client\n}\n\ndatasource db {\n  provider = \"mysql\"\n}\n\nenum TransactionStatus {\n  PENDING\n  DEBITED\n  CREDITED\n  FAILED\n}\n\nenum LedgerType {\n  DEBIT\n  CREDIT\n}\n\nmodel Wallet {\n  id         BigInt   @id @default(autoincrement()) @db.BigInt\n  user_id    BigInt   @unique @db.BigInt\n  balance    BigInt   @default(0) @db.BigInt\n  version    Int      @default(0)\n  created_at DateTime @default(now())\n  updated_at DateTime @updatedAt\n\n  @@index([user_id], name: \"idx_user_id\")\n  @@map(\"wallets\")\n}\n\nmodel Transaction {\n  id              BigInt            @id @default(autoincrement()) @db.BigInt\n  from_user       BigInt            @db.BigInt\n  to_user         BigInt            @db.BigInt\n  amount          BigInt            @db.BigInt\n  status          TransactionStatus @default(PENDING)\n  idempotency_key String            @unique @db.VarChar(255)\n  created_at      DateTime          @default(now())\n\n  @@index([from_user], name: \"idx_from_user\")\n  @@index([to_user], name: \"idx_to_user\")\n  @@index([status], name: \"idx_status\")\n  @@index([idempotency_key], name: \"idx_idempotency_key\")\n  @@map(\"transactions\")\n}\n\nmodel Ledger {\n  id             BigInt     @id @default(autoincrement()) @db.BigInt\n  user_id        BigInt     @db.BigInt\n  transaction_id BigInt     @db.BigInt\n  amount         BigInt     @db.BigInt\n  type           LedgerType\n  created_at     DateTime   @default(now())\n\n  @@index([user_id], name: \"idx_user_id\")\n  @@index([transaction_id], name: \"idx_transaction_id\")\n  @@index([created_at], name: \"idx_created_at\")\n  @@map(\"ledger\")\n}\n",
+  "inlineSchema": "//Schema for Paytm Wallet Clone\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\" //default > node_modules/@prisma/client\n}\n\ndatasource db {\n  provider = \"mysql\"\n}\n\nenum TransactionStatus {\n  PENDING\n  DEBITED\n  CREDITED\n  FAILED\n}\n\nenum LedgerType {\n  DEBIT\n  CREDIT\n}\n\nmodel Wallet {\n  id         BigInt   @id @default(autoincrement()) @db.BigInt\n  user_id    BigInt   @unique @db.BigInt\n  balance    BigInt   @default(0) @db.BigInt\n  version    Int      @default(0)\n  created_at DateTime @default(now())\n  updated_at DateTime @updatedAt\n\n  @@index([user_id], name: \"idx_user_id\")\n  @@map(\"wallets\")\n}\n\nmodel Transaction {\n  id              BigInt            @id @default(autoincrement()) @db.BigInt\n  from_user       BigInt            @db.BigInt\n  to_user         BigInt            @db.BigInt\n  amount          BigInt            @db.BigInt\n  status          TransactionStatus @default(PENDING)\n  idempotency_key String            @unique @db.VarChar(255)\n  created_at      DateTime          @default(now())\n\n  @@index([from_user], name: \"idx_from_user\")\n  @@index([to_user], name: \"idx_to_user\")\n  @@index([status], name: \"idx_status\")\n  @@index([idempotency_key], name: \"idx_idempotency_key\")\n  @@map(\"transactions\")\n}\n\nmodel Ledger {\n  id             BigInt     @id @default(autoincrement()) @db.BigInt\n  user_id        BigInt     @db.BigInt\n  transaction_id BigInt     @db.BigInt\n  amount         BigInt     @db.BigInt\n  type           LedgerType\n  created_at     DateTime   @default(now())\n\n  @@index([user_id], name: \"idx_user_id\")\n  @@index([transaction_id], name: \"idx_transaction_id\")\n  @@index([created_at], name: \"idx_created_at\")\n  @@map(\"ledger\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -45,10 +45,10 @@ async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Modul
 }
 
 config.compilerWasm = {
-  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_fast_bg.mysql.mjs"),
+  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_fast_bg.mysql.js"),
 
   getQueryCompilerWasmModule: async () => {
-    const { wasm } = await import("@prisma/client/runtime/query_compiler_fast_bg.mysql.wasm-base64.mjs")
+    const { wasm } = await import("@prisma/client/runtime/query_compiler_fast_bg.mysql.wasm-base64.js")
     return await decodeBase64AsWasm(wasm)
   },
 
