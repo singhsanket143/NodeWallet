@@ -9,7 +9,7 @@ export class ConnectionManager {
         return getPrismaClient(shardId);
     }
 
-    async executeTransaction<T>(shardId: ShardId, fn: (tx: Prisma.TransactionClient) => Promise<T>): Promise<T> {
+    async executeInTransaction<T>(shardId: ShardId, fn: (tx: Prisma.TransactionClient) => Promise<T>): Promise<T> {
         const client = getPrismaClient(shardId)
 
         return await client.$transaction(fn, {
