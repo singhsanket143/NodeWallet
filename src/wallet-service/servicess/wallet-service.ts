@@ -58,7 +58,7 @@ export class WalletService {
     async addMoney(
         userId: bigint,
         amount: bigint,
-        transactionId: bigint,
+        transactionId?: bigint,
     ): Promise<Wallet> {
 
         if(amount <= 0){

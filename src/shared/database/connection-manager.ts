@@ -5,7 +5,7 @@ import { getPrismaClient } from "./prisma-clients";
 export class ConnectionManager {
 
     // get prisma client for a specific shard (for transactional operations)
-    static getClient(shardId: ShardId): PrismaClient {
+    getClient(shardId: ShardId): PrismaClient {
         return getPrismaClient(shardId);
     }
 
